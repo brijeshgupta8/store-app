@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchased Products</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/checkout">Checkout</a></li>
+            <li><a href="/purchased">Purchased Products</a></li>
+        </ul>
+    </nav>
+    <h1>Purchased Products</h1>
+    <div id="purchased-list" class="purchased-list"></div>
+
+    <script>
+        fetch('/api/purchased')
+            .then(response => response.json())
+            .then(data => {
+                const purchasedList = document.getElementById('purchased-list');
+                data.forEach(product => {
+                    const purchasedItem = document.createElement('div');
+                    purchasedItem.classList.add('purchased-item');
+                    purchasedItem.innerHTML = `
+                        <img src="/images/${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>Price: $${product.price}</p>
+                    `;
+                    purchasedList.appendChild(purchasedItem);
+                });
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/checkout">Checkout</a></li>
+            <li><a href="/purchased">Purchased Products</a></li>
+        </ul>
+    </nav>
+    <h1>Cart</h1>
+    <div id="cart-list" class="cart-list"></div>
+    <button onclick="checkout()">Checkout</button>
+
+    <script>
+        function renderCart() {
+            const cartList = document.getElementById('cart-list');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cartList.innerHTML = '';
+            cart.forEach(productId => {
+                fetch(`/api/products/${productId}`)
+                    .then(response => response.json())
+                    .then(product => {
+                        const cartItem = document.createElement('div');
+                        cartItem.classList.add('cart-item');
+                        cartItem.innerHTML = `
+                            <img src="/images/${product.image}" alt="${product.name}">
+                            <h3>${product.name}</h3>
+                            <p>Price: $${product.price}</p>
+                        `;
+                        cartList.appendChild(cartItem);
+                    });
+            });
+        }
+
+        function checkout() {
+            window.location.href = '/checkout';
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>
